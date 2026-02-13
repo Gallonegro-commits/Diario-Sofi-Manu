@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sofi & Manu - Nuestro Diario de Citas 💕</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 3em;
+            color: #d4567a;
+            margin-bottom: 10px;
+            font-family: 'Brush Script MT', cursive;
+        }
+
+        .counter {
+            font-size: 1.3em;
+            color: #8b5a7d;
+            margin-top: 15px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .tab {
+            padding: 15px 30px;
+            background: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-family: 'Georgia', serif;
+            color: #8b5a7d;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .tab:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .tab.active {
+            background: linear-gradient(135deg, #d4567a 0%, #b8406e 100%);
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .form-section {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #8b5a7d;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ffd1dc;
+            border-radius: 10px;
+            font-size: 1em;
+            font-family: 'Georgia', serif;
+            transition: border-color 0.3s;
+        }
+
+        input:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #d4567a;
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .rating {
+            display: flex;
+            gap: 10px;
+            font-size: 2em;
+        }
+
+        .star {
+            cursor: pointer;
+            color: #ddd;
+            transition: color 0.2s;
+        }
+
+        .star:hover,
+        .star.active {
+            color: #ffd700;
+        }
+
+        .photo-upload {
+            margin-top: 10px;
+        }
+
+        .photo-preview {
+            max-width: 100%;
+            max-height: 200px;
+            margin-top: 10px;
+            border-radius: 10px;
+        }
+
+        .btn {
+            padding: 15px 40px;
+            background: linear-gradient(135deg, #d4567a 0%, #b8406e 100%);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1em;
+            cursor: pointer;
+            font-family: 'Georgia', serif;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(212, 86, 122, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(212, 86, 122, 0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #8b5a7d 0%, #6d4566 100%);
+        }
+
+        .timeline {
+            position: relative;
+            padding: 20px 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, #d4567a 0%, #ffd1dc 100%);
+        }
+
+        .date-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            position: relative;
+            width: 45%;
+            transition: all 0.3s;
+        }
+
+        .date-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .date-card:nth-child(odd) {
+            margin-left: 0;
+            margin-right: auto;
+        }
+
+        .date-card:nth-child(even) {
+            margin-left: auto;
+            margin-right: 0;
+        }
+
+        .date-card::before {
+            content: '💕';
+            position: absolute;
+            font-size: 1.5em;
+            top: 25px;
+        }
+
+        .date-card:nth-child(odd)::before {
+            right: -60px;
+        }
+
+        .date-card:nth-child(even)::before {
+            left: -60px;
+        }
+
+        .date-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #ffd1dc;
+        }
+
+        .date-title {
+            font-size: 1.5em;
+            color: #d4567a;
+            font-weight: bold;
+        }
+
+        .date-date {
+            color: #8b5a7d;
+            font-style: italic;
+        }
+
+        .favorite-badge {
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            color: #8b5a7d;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+
+        .date-photo {
+            width: 100%;
+            max-height: 300px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+
+        .thoughts-section {
+            margin-top: 15px;
+        }
+
+        .thought {
+            background: #fff5f7;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+            border-left: 4px solid #d4567a;
+        }
+
+        .thought-author {
+            font-weight: bold;
+            color: #d4567a;
+            margin-bottom: 5px;
+        }
+
+        .rating-display {
+            color: #ffd700;
+            font-size: 1.5em;
+            margin: 10px 0;
+        }
+
+        .upcoming-dates {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .upcoming-card {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid #d4567a;
+        }
+
+        .upcoming-card h3 {
+            color: #d4567a;
+            margin-bottom: 10px;
+        }
+
+        .upcoming-card p {
+            color: #8b5a7d;
+            margin: 5px 0;
+        }
+
+        .phrases-section {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .phrase-card {
+            background: linear-gradient(135deg, #fff5f7 0%, #ffe8f0 100%);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 15px 0;
+            border-left: 4px solid #d4567a;
+        }
+
+        .phrase-text {
+            font-size: 1.2em;
+            color: #8b5a7d;
+            font-style: italic;
+            margin-bottom: 10px;
+        }
+
+        .phrase-author {
+            text-align: right;
+            color: #d4567a;
+            font-weight: bold;
+        }
+
+        .delete-btn {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 0.9em;
+            margin-top: 10px;
+            transition: all 0.3s;
+        }
+
+        .delete-btn:hover {
+            background: #ff5252;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .checkbox-label input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+
+            .timeline::before {
+                left: 20px;
+            }
+
+            .date-card {
+                width: 100%;
+                margin-left: 50px !important;
+            }
+
+            .date-card::before {
+                left: -40px !important;
+            }
+
+            .upcoming-dates {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>💕 Sofi & Manu 💕</h1>
+            <p style="font-size: 1.2em; color: #8b5a7d;">Nuestro Diario de Citas</p>
+            <div class="counter">
+                <span id="dateCounter">0 citas inolvidables</span>
+            </div>
+        </header>
+
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('nueva-cita')">➕ Nueva Cita</button>
+            <button class="tab" onclick="showTab('timeline')">📅 Timeline</button>
+            <button class="tab" onclick="showTab('proximas')">🗓️ Próximas Citas</button>
+            <button class="tab" onclick="showTab('frases')">💌 Nuestras Frases</button>
+        </div>
+
+        <!-- Nueva Cita -->
+        <div id="nueva-cita" class="tab-content active">
+            <div class="form-section">
+                <h2 style="color: #d4567a; margin-bottom: 20px;">Agregar Nueva Cita</h2>
+                <form id="dateForm">
+                    <div class="form-group">
+                        <label>Fecha de la cita:</label>
+                        <input type="date" id="dateInput" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Lugar / Nombre de la cita:</label>
+                        <input type="text" id="placeInput" placeholder="Ej: Restaurante La Bella Italia" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Calificación:</label>
+                        <div class="rating" id="ratingInput">
+                            <span class="star" data-rating="1">★</span>
+                            <span class="star" data-rating="2">★</span>
+                            <span class="star" data-rating="3">★</span>
+                            <span class="star" data-rating="4">★</span>
+                            <span class="star" data-rating="5">★</span>
+                        </div>
+                        <input type="hidden" id="ratingValue" value="0">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Foto de la comida/lugar (opcional):</label>
+                        <input type="file" id="photoInput" accept="image/*" class="photo-upload">
+                        <img id="photoPreview" class="photo-preview" style="display: none;">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Pensamientos de Manu:</label>
+                        <textarea id="manuThoughts" placeholder="¿Qué pensaste de esta cita?"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Pensamientos de Sofi:</label>
+                        <textarea id="sofiThoughts" placeholder="¿Qué pensaste de esta cita?"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="favoriteCheck">
+                            <span>⭐ Marcar como Momento Favorito</span>
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn">💕 Guardar Cita</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Timeline -->
+        <div id="timeline" class="tab-content">
+            <div class="timeline" id="timelineContainer">
+                <p style="text-align: center; color: #8b5a7d; font-size: 1.2em;">
+                    Aún no hay citas registradas. ¡Agrega tu primera cita! 💕
+                </p>
+            </div>
+        </div>
+
+        <!-- Próximas Citas -->
+        <div id="proximas" class="tab-content">
+            <div class="form-section">
+                <h2 style="color: #d4567a; margin-bottom: 20px;">Agregar Próxima Cita</h2>
+                <form id="upcomingForm">
+                    <div class="form-group">
+                        <label>Fecha planeada:</label>
+                        <input type="date" id="upcomingDate" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>¿Qué vamos a hacer?</label>
+                        <input type="text" id="upcomingPlace" placeholder="Ej: Cena en el nuevo restaurante japonés" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Notas/Ideas:</label>
+                        <textarea id="upcomingNotes" placeholder="Reservar a las 8pm, vestir elegante..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn">➕ Agregar Plan</button>
+                </form>
+            </div>
+
+            <div class="upcoming-dates" id="upcomingContainer" style="margin-top: 30px;">
+            </div>
+        </div>
+
+        <!-- Frases -->
+        <div id="frases" class="tab-content">
+            <div class="form-section">
+                <h2 style="color: #d4567a; margin-bottom: 20px;">Nueva Frase/Dedicatoria</h2>
+                <form id="phraseForm">
+                    <div class="form-group">
+                        <label>¿Quién la dice?</label>
+                        <select id="phraseAuthor" style="width: 100%; padding: 12px; border: 2px solid #ffd1dc; border-radius: 10px; font-size: 1em;">
+                            <option value="Manu">Manu</option>
+                            <option value="Sofi">Sofi</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>La frase:</label>
+                        <textarea id="phraseText" placeholder="Escribe algo bonito..." required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn">💌 Guardar Frase</button>
+                </form>
+            </div>
+
+            <div class="phrases-section" id="phrasesContainer" style="margin-top: 30px;">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Storage keys
+        const DATES_KEY = 'sofi-manu-dates';
+        const UPCOMING_KEY = 'sofi-manu-upcoming';
+        const PHRASES_KEY = 'sofi-manu-phrases';
+
+        // Load data from localStorage
+        function loadData(key) {
+            const data = localStorage.getItem(key);
+            return data ? JSON.parse(data) : [];
+        }
+
+        // Save data to localStorage
+        function saveData(key, data) {
+            localStorage.setItem(key, JSON.stringify(data));
+        }
+
+        // Tab switching
+        function showTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+
+            if (tabName === 'timeline') {
+                renderTimeline();
+            } else if (tabName === 'proximas') {
+                renderUpcoming();
+            } else if (tabName === 'frases') {
+                renderPhrases();
+            }
+        }
+
+        // Rating system
+        let currentRating = 0;
+        document.querySelectorAll('.star').forEach(star => {
+            star.addEventListener('click', function() {
+                currentRating = parseInt(this.getAttribute('data-rating'));
+                document.getElementById('ratingValue').value = currentRating;
+                updateStars();
+            });
+        });
+
+        function updateStars() {
+            document.querySelectorAll('.star').forEach(star => {
+                const rating = parseInt(star.getAttribute('data-rating'));
+                if (rating <= currentRating) {
+                    star.classList.add('active');
+                } else {
+                    star.classList.remove('active');
+                }
+            });
+        }
+
+        // Photo preview
+        document.getElementById('photoInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.getElementById('photoPreview');
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Submit date form
+        document.getElementById('dateForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const photoInput = document.getElementById('photoInput');
+            const photoFile = photoInput.files[0];
+
+            if (photoFile) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    saveDate(e.target.result);
+                };
+                reader.readAsDataURL(photoFile);
+            } else {
+                saveDate(null);
+            }
+        });
+
+        function saveDate(photoData) {
+            const date = {
+                id: Date.now(),
+                date: document.getElementById('dateInput').value,
+                place: document.getElementById('placeInput').value,
+                rating: currentRating,
+                photo: photoData,
+                manuThoughts: document.getElementById('manuThoughts').value,
+                sofiThoughts: document.getElementById('sofiThoughts').value,
+                favorite: document.getElementById('favoriteCheck').checked
+            };
+
+            const dates = loadData(DATES_KEY);
+            dates.push(date);
+            saveData(DATES_KEY, dates);
+
+            // Reset form
+            document.getElementById('dateForm').reset();
+            document.getElementById('photoPreview').style.display = 'none';
+            currentRating = 0;
+            updateStars();
+
+            alert('¡Cita guardada con éxito! 💕');
+            updateCounter();
+        }
+
+        // Render timeline
+        function renderTimeline() {
+            const dates = loadData(DATES_KEY);
+            const container = document.getElementById('timelineContainer');
+
+            if (dates.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #8b5a7d; font-size: 1.2em;">Aún no hay citas registradas. ¡Agrega tu primera cita! 💕</p>';
+                return;
+            }
+
+            // Sort by date (newest first)
+            dates.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            container.innerHTML = dates.map(date => `
+                <div class="date-card">
+                    <div class="date-header">
+                        <div>
+                            <div class="date-title">${date.place}</div>
+                            <div class="date-date">${formatDate(date.date)}</div>
+                        </div>
+                        ${date.favorite ? '<div class="favorite-badge">⭐ Favorito</div>' : ''}
+                    </div>
+
+                    <div class="rating-display">
+                        ${'★'.repeat(date.rating)}${'☆'.repeat(5 - date.rating)}
+                    </div>
+
+                    ${date.photo ? `<img src="${date.photo}" class="date-photo" alt="Foto de la cita">` : ''}
+
+                    <div class="thoughts-section">
+                        ${date.manuThoughts ? `
+                            <div class="thought">
+                                <div class="thought-author">💙 Manu:</div>
+                                <div>${date.manuThoughts}</div>
+                            </div>
+                        ` : ''}
+
+                        ${date.sofiThoughts ? `
+                            <div class="thought">
+                                <div class="thought-author">💖 Sofi:</div>
+                                <div>${date.sofiThoughts}</div>
+                            </div>
+                        ` : ''}
+                    </div>
+
+                    <button class="delete-btn" onclick="deleteDate(${date.id})">🗑️ Eliminar</button>
+                </div>
+            `).join('');
+        }
+
+        // Delete date
+        function deleteDate(id) {
+            if (confirm('¿Estás seguro de eliminar esta cita?')) {
+                let dates = loadData(DATES_KEY);
+                dates = dates.filter(date => date.id !== id);
+                saveData(DATES_KEY, dates);
+                renderTimeline();
+                updateCounter();
+            }
+        }
+
+        // Format date
+        function formatDate(dateString) {
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString('es-ES', options);
+        }
+
+        // Update counter
+        function updateCounter() {
+            const dates = loadData(DATES_KEY);
+            const counter = document.getElementById('dateCounter');
+            const count = dates.length;
+            counter.textContent = count === 1 ? '1 cita inolvidable' : `${count} citas inolvidables`;
+        }
+
+        // Upcoming dates
+        document.getElementById('upcomingForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const upcoming = {
+                id: Date.now(),
+                date: document.getElementById('upcomingDate').value,
+                place: document.getElementById('upcomingPlace').value,
+                notes: document.getElementById('upcomingNotes').value
+            };
+
+            const upcomingDates = loadData(UPCOMING_KEY);
+            upcomingDates.push(upcoming);
+            saveData(UPCOMING_KEY, upcomingDates);
+
+            this.reset();
+            renderUpcoming();
+            alert('¡Plan agregado! 🗓️');
+        });
+
+        function renderUpcoming() {
+            const upcoming = loadData(UPCOMING_KEY);
+            const container = document.getElementById('upcomingContainer');
+
+            if (upcoming.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #8b5a7d; font-size: 1.2em;">No hay próximas citas planeadas aún 📅</p>';
+                return;
+            }
+
+            // Sort by date
+            upcoming.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+            container.innerHTML = upcoming.map(item => `
+                <div class="upcoming-card">
+                    <h3>${item.place}</h3>
+                    <p><strong>📅 Fecha:</strong> ${formatDate(item.date)}</p>
+                    ${item.notes ? `<p><strong>📝 Notas:</strong> ${item.notes}</p>` : ''}
+                    <button class="delete-btn" onclick="deleteUpcoming(${item.id})">🗑️ Eliminar</button>
+                </div>
+            `).join('');
+        }
+
+        function deleteUpcoming(id) {
+            if (confirm('¿Eliminar este plan?')) {
+                let upcoming = loadData(UPCOMING_KEY);
+                upcoming = upcoming.filter(item => item.id !== id);
+                saveData(UPCOMING_KEY, upcoming);
+                renderUpcoming();
+            }
+        }
+
+        // Phrases
+        document.getElementById('phraseForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const phrase = {
+                id: Date.now(),
+                author: document.getElementById('phraseAuthor').value,
+                text: document.getElementById('phraseText').value,
+                date: new Date().toISOString()
+            };
+
+            const phrases = loadData(PHRASES_KEY);
+            phrases.push(phrase);
+            saveData(PHRASES_KEY, phrases);
+
+            this.reset();
+            renderPhrases();
+            alert('¡Frase guardada! 💌');
+        });
+
+        function renderPhrases() {
+            const phrases = loadData(PHRASES_KEY);
+            const container = document.getElementById('phrasesContainer');
+
+            if (phrases.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #8b5a7d; font-size: 1.2em;">Aún no hay frases. ¡Deja la primera dedicatoria! 💌</p>';
+                return;
+            }
+
+            // Sort by date (newest first)
+            phrases.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            container.innerHTML = phrases.map(phrase => `
+                <div class="phrase-card">
+                    <div class="phrase-text">"${phrase.text}"</div>
+                    <div class="phrase-author">— ${phrase.author} ${phrase.author === 'Manu' ? '💙' : '💖'}</div>
+                    <button class="delete-btn" onclick="deletePhrase(${phrase.id})">🗑️ Eliminar</button>
+                </div>
+            `).join('');
+        }
+
+        function deletePhrase(id) {
+            if (confirm('¿Eliminar esta frase?')) {
+                let phrases = loadData(PHRASES_KEY);
+                phrases = phrases.filter(phrase => phrase.id !== id);
+                saveData(PHRASES_KEY, phrases);
+                renderPhrases();
+            }
+        }
+
+        // Initialize
+        updateCounter();
+    </script>
+</body>
+</html>
